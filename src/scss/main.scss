@@ -1,0 +1,125 @@
+html {
+    box-sizing: border-box;
+}
+  
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+  
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    background-color: #fff;
+    color: #212121;
+}
+
+.gallery {
+    display: grid;
+    width: 1200px;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    grid-auto-rows: 240px;
+    grid-gap: 12px;
+    padding: 0;
+    list-style: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.gallery__item {
+    position: relative;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
+        0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+}
+
+.gallery__image:hover {
+    transform: scale(1.03);
+}
+
+.gallery__image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    transition: transform 200ms ease-in-out;
+}
+
+.photo-card {
+    display: block;
+    position: relative;
+    text-decoration: none;
+    height: 100%;
+}
+
+.photo-card {
+    cursor: zoom-in;
+}
+
+.stats{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    display: flex;
+    padding: 0px 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: rgba(255, 255, 255, 0.9);
+    pointer-events: none;
+}
+
+.stats-item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+    pointer-events: all;
+    &:last-child{
+        margin-right: 0;
+    }
+}
+
+.material-icons{
+    margin-right: 5px;
+}
+
+/*  search-form  */
+.form-wrapper{
+    display: flex;
+    justify-content: center;
+}
+.search-form{
+    position: fixed;
+    margin-top: 20px;
+    z-index: 1;
+    input{
+        height: 45px;
+        padding-left: 15px;
+        width: 250px;
+        background-color: rgba(0, 0, 0, 0.2);
+        color: rgba(255, 255, 255, 0.9);;
+        font-size: 25px;
+        border-radius: 10px;
+        border: none;
+    }
+}
+.controls{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.load-more-btn{
+    font-size: 20px;
+    padding: 5px 15px;
+    border-radius: 5px;
+    border: none;
+    height: 45px;
+}
+.is-hidden{
+    display: none;
+}

@@ -1,3 +1,2 @@
-import './styles.css';
+import './scss/main.scss';
 import './js/main'
-//https://github.com/goitacademy/javascript-homework/tree/master/homework-13
