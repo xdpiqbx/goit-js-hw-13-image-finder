@@ -4,6 +4,7 @@ import tplGallery from '../templates/gallery.hbs'
 import tplButton from '../templates/load-more-btn.hbs'
 
 const debounce = require('lodash.debounce');
+const throttle = require('lodash.throttle');
 
 const refs = {
     formPlaceholder: document.querySelector(".form-wrapper"),
@@ -12,7 +13,7 @@ const refs = {
 }
 
 let queryObject = {
-    search: "cat",
+    search: 1,
     page: 1
 }
 
@@ -22,42 +23,43 @@ const searchForm = document.querySelector("#search-form")
 
 const marcupButton = tplButton();
 refs.controlsPlaceholder.insertAdjacentHTML("beforeend", marcupButton)
-
 const refLoadMoreBtn = document.querySelector(".js-load-more")
-refLoadMoreBtn.addEventListener('click', ()=>{ // Load more
+
+const callbackForButton = (event) =>{
     queryObject.page += 1;
-    updateGallery(queryObject);
-})
+    updateGallery(queryObject, event);
+}
+refLoadMoreBtn.addEventListener('click', throttle(callbackForButton, 300))
 
+const callbackForInput = (event)=>{
+    queryObject.search = event.target.value;
+    updateGallery(queryObject, event)
+}
+searchForm.addEventListener("input", debounce(callbackForInput, 500))
 
-const updateGallery = (obj) =>{
+const updateGallery = (obj, {type}) =>{
     const fromPixabay = pixabayFetch(obj);
+    let isClean = false // если событие инпут перерисует галерею
     fromPixabay.then(data => {
-        console.log(data.hits)
-        createGallery(data.hits)
-        if (data.hits.length > 0){// нарисовать кнопку если есть картинки
-            setTimeout(()=>{ // если картинки ещё не успели подгрузится
-                refLoadMoreBtn.classList.remove("is-hidden");
-            }, 500)
-            window.scrollTo({
-                top: document.documentElement.offsetHeight,
-                behavior: 'smooth'
-            });
+        if (type === 'input'){
+            isClean = true;
+        }
+        createGallery(data.hits, isClean)
+        if(data.hits.length !== 0){
+            refLoadMoreBtn.classList.remove("is-hidden");
         }
     })
 }
 
-const callbackForInput = (event)=>{
-    console.log(event.target.value)
-    queryObject.search = event.target.value;
-    updateGallery(queryObject)
-}
-
-searchForm.addEventListener("input", debounce(callbackForInput, 500))
-
-const createGallery = data => {
+const createGallery = (data, isClean) => {
     const marcupGallery = tplGallery(data);
-    refs.galleryPlaceholder.insertAdjacentHTML("beforeend", marcupGallery)
+    if(isClean){
+        refs.galleryPlaceholder.innerHTML = marcupGallery;
+    }else{
+        refs.galleryPlaceholder.insertAdjacentHTML("beforeend", marcupGallery);
+    }
+    window.scrollTo({
+        top: document.documentElement.offsetHeight,
+        behavior: 'smooth'
+    });
 }
-
-//https://github.com/goitacademy/javascript-homework/tree/master/homework-13
