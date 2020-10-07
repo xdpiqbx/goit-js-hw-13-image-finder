@@ -11,6 +11,11 @@ const refs = {
     controlsPlaceholder: document.querySelector(".controls")
 }
 
+let queryObject = {
+    search: "cat",
+    page: 1
+}
+
 const marcupForm = tplForm();
 refs.formPlaceholder.insertAdjacentHTML("beforeend", marcupForm)
 const searchForm = document.querySelector("#search-form")
@@ -19,25 +24,26 @@ const marcupButton = tplButton();
 refs.controlsPlaceholder.insertAdjacentHTML("beforeend", marcupButton)
 
 const refLoadMoreBtn = document.querySelector(".js-load-more")
-refLoadMoreBtn.addEventListener('click', ()=>{
-
+refLoadMoreBtn.addEventListener('click', ()=>{ // Load more
+    queryObject.page += 1;
+    updateGallery(queryObject);
 })
 
-let queryObject = {
-    search: "cat",
-    page: 1
-}
 
 const updateGallery = (obj) =>{
     const fromPixabay = pixabayFetch(obj);
     fromPixabay.then(data => {
         console.log(data.hits)
         createGallery(data.hits)
-        // if (data.hits.length > 0){// нарисовать кнопку если есть картинки
-        //     setTimeout(()=>{ // если картинки ещё не успели подгрузится
-        //         refLoadMoreBtn.classList.remove("is-hidden");
-        //     }, 500)
-        // }
+        if (data.hits.length > 0){// нарисовать кнопку если есть картинки
+            setTimeout(()=>{ // если картинки ещё не успели подгрузится
+                refLoadMoreBtn.classList.remove("is-hidden");
+            }, 500)
+            window.scrollTo({
+                top: document.documentElement.offsetHeight,
+                behavior: 'smooth'
+            });
+        }
     })
 }
 
