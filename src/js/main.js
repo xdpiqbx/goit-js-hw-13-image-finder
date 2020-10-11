@@ -26,7 +26,7 @@ const refLoadMoreBtn = document.querySelector(".js-load-more")
 refs.galleryPlaceholder.addEventListener("click", (event) => {
     let url = event.target.dataset.source
     const instanceOfBasicLightbox = basicLightbox.create(
-        tplLightbox({url}), {closable: true}
+        tplLightbox({url})
     ).show()
 })
 
